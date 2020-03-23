@@ -1,0 +1,74 @@
+// Configure client & request settings
+GatewayConfig config = new GatewayConfig();
+config.setMerchantId("MerchantId");
+config.setAccountId("internet");
+config.setSharedSecret("secret");
+config.setMethodNotificationUrl("https://www.example.com/methodNotificationUrl");
+config.setChallengeNotificationUrl("https://www.example.com/challengeNotificationUrl");
+config.setMerchantContactUrl("https://www.example.com/about");
+config.setSecure3dVersion(Secure3dVersion.TWO);
+ServicesContainer.configureService(config);
+
+// Add the cardholder data
+CreditCardData card = new CreditCardData();
+card.setNumber("4012001038488884");
+card.setExpMonth(12);
+card.setExpYear(2025);
+card.setCvn("123");
+card.setCardHolderName("James Mason");
+
+// Add the customer's billing address
+Address billingAddress = new Address();
+billingAddress.setStreetAddress1("Apartment 852");
+billingAddress.setStreetAddress2("Complex 741");
+billingAddress.setStreetAddress3("Unit 4");
+billingAddress.setCity("Chicago");
+billingAddress.setPostalCode("50001");
+billingAddress.setState("IL");
+billingAddress.setCountryCode("840");
+
+// Add the customer's shipping address
+Address shippingAddress = new Address();
+shippingAddress.setStreetAddress1("Flat 456");
+shippingAddress.setStreetAddress2("House 789");
+shippingAddress.setStreetAddress3("Basement Flat");
+shippingAddress.setCity("Halifax");
+shippingAddress.setPostalCode("W5 9HR");
+shippingAddress.setCountryCode("826");
+
+// Add captured browser data from the client-side and server-side
+BrowserData browserData = new BrowserData();
+browserData.setAcceptHeader("text/html,application/xhtml+xml,application/xml;q=9,image/webp,img/apng,/;q=0.8");
+browserData.setColorDepth(ColorDepth.TwentyFourBit);
+browserData.setIpAddress("123.123.123.123");
+browserData.setJavaEnabled(true);
+browserData.setLanguage("en");
+browserData.setScreenHeight(1080);
+browserData.setScreenWidth(1920);
+browserData.setChallengeWindowSize(ChallengeWindowSize.Windowed_600x400);
+browserData.setTimezone("0");
+browserData.setUserAgent("Mozilla/5.0 (Windows NT 6.1; Win64, x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36");
+
+ThreeDSecure threeDSecureData = new ThreeDSecure();
+threeDSecureData.setServerTransactionId("9de5bccf-c438-4024-8961-ec4b3cff15ff");
+
+try {
+   // Initiate the 3D Secure 2 Authentication request
+   threeDSecureData = Secure3dService.initiateAuthentication(card, threeDSecureData)
+      .withAmount(new BigDecimal("10.01"))
+      .withCurrency("USD")
+      .withOrderCreateDate(DateTime.parse("2019-09-09T11:19:12"))
+      .withCustomerEmail("james.mason@example.com")
+      .withAddress(shippingAddress, AddressType.Billing)
+      .withAddress(billingAddress, AddressType.Shipping)
+      .withBrowserData(browserData)
+      .withMethodUrlCompletion(MethodUrlCompletion.Yes)
+      .withMobileNumber("44", "7123456789")
+      .execute();
+}
+
+catch (ApiException exce) {
+   // TODO: add your error handling here
+}
+
+String status = threeDSecureData.getStatus(); // for example AUTHENTICATION_SUCCESSFUL or CHALLENGE_REQUIRED

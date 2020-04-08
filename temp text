@@ -72,3 +72,81 @@ catch (ApiException exce) {
 }
 
 String status = threeDSecureData.getStatus(); // for example AUTHENTICATION_SUCCESSFUL or CHALLENGE_REQUIRED
+
+
+
+
+===========
+
+
+
+
+curl https://api.sandbox.globalpay-ecommerce.com/3ds2/authentications
+-H "Content-type: application/json"
+-H "Authorization: securehash abafc599cfa60c94b8f41d0668dac5ed6b0a21f7"
+-X POST
+-d '{
+   "request_timestamp": "2019-07-30T08:52:44.991911",
+   "authentication_source": "BROWSER",
+   "authentication_request_type": "PAYMENT_TRANSACTION",
+   "message_category": "PAYMENT_AUTHENTICATION",
+   "message_version": "2.1.0",
+   "challenge_request_indicator":"NO_PREFERENCE",
+   "server_trans_id": "ad0fffeb-bfff-44d0-881f-b857fe77c5a2",
+   "merchant_id": "MerchantId",
+   "account_id": "internet",
+   "card_detail": {
+      "number": "4263970000005262",
+      "scheme": "VISA",
+      "expiry_month": "10",
+      "expiry_year": "25",
+      "full_name": "James Mason"
+   },
+   "order": {
+      "date_time_created": "2019-04-26T10:19:32.552327",
+      "amount": "1001",
+      "currency": "EUR",
+      "id": "3400dd37-101d-4940-be15-3c963b6109b3",
+      "address_match_indicator": "false",
+      "shipping_address": {
+         "line1": "Apartment 852",
+         "line2": "Complex 741",
+         "line3": "House 963",
+         "city": "Chicago",
+         "postal_code": "50001",
+         "state": "IL",
+         "country": "840"
+      }
+   },
+   "payer": {
+      "email": "james.mason@example.com",
+      "billing_address": {
+         "line1": "Flat 123",
+         "line2": "House 456",
+         "line3": "Unit 4",
+         "city": "Halifax",
+         "postal_code": "W5 9HR",
+         "country": "826"
+      },
+      "mobile_phone": {
+         "country_code": "44",
+         "subscriber_number": "7123456789"
+      }
+   },
+   "challenge_notification_url": "https://www.example.com/challengeNotificationUrl",
+   "method_url_completion": "YES",
+   "browser_data": {
+      "accept_header": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+      "color_depth": "TWENTY_FOUR_BITS",
+      "ip": "123.123.123.123",
+      "java_enabled": "true",
+      "javascript_enabled": "true",
+      "language": "en-US",
+      "screen_height": "1080",
+      "screen_width": "1920",
+      "challenge_window_size": "FULL_SCREEN",
+      "timezone": "0",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36"
+   },
+   "merchant_contact_url": "https://www.example.com/about"
+}'
